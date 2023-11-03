@@ -15,8 +15,5 @@
   "bugs": {
     "url": "https://github.com/avas27027/cjtest/issues"
   },
-  "homepage": "https://github.com/avas27027/cjtest#readme",
-  "dependencies": {
-    "express": "^4.18.2"
-  }
+  "homepage": "https://github.com/avas27027/cjtest#readme"
 }
