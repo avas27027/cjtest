@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "removeComments": true
+  },
+  "exclude": [
+    "src/index.ts",
+    "src/pre-start.ts",
+    "src/server.ts",
+    "src/vercel-api/",
+    "src/public/",
+    "build.ts"
+  ]
+}
