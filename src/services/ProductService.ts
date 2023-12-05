@@ -1,9 +1,11 @@
+import EnvVars from '@src/constants/EnvVars';
 import { ProductList, CategoryList, ProductDetail, ProductReview, Product } from '../models/Products';
 import ProductRepo from '../repos/ProductRepo';
 import KeyService from '../services/KeyService';
 
 const CJfetcher = async (api: string, aToken: string, method: 'GET' | 'POST') => await fetch(`https://developers.cjdropshipping.com/api2.0/v1/product${api}`, { method: method, headers: { 'CJ-Access-Token': aToken, "Content-Type": "application/json" } }).then((res) => res.json())
 const Strapifetcher = async () => await fetch(`https://strapi3-gm7c.onrender.com/api/product-skus`, { method: "GET" }).then((res) => res.json())
+const interval = EnvVars.Server_Config.syncIntervalMins
 
 /**
  * Sync the new products with the DB
@@ -18,6 +20,12 @@ const syncNewProds = async (skuList: string[], key: string) => {
     }
     await ProductRepo.syncProducts(productList)
 }
+/**
+ * 
+ * @param skuList SKU List
+ * @param key CJ Key
+ * @param syncMinutes Interval between each sync
+ */
 const syncNewProdsInter = async (skuList: string[], key: string, syncMinutes: number) => {
     const firstProd = await ProductRepo.getAll()
     const now = new Date()
@@ -49,7 +57,7 @@ async function getProductList(): Promise<Product[]> {
     const key = await KeyService.getKey();
     const skuResponse = await Strapifetcher();
     const skuList: string[] = skuResponse.data.map((e: { attributes: { SKU: string } }) => { return e.attributes.SKU })
-    syncNewProdsInter(skuList, key.data.accessToken, 15)
+    syncNewProdsInter(skuList, key.data.accessToken, interval)
     return await ProductRepo.getAll();
 }
 

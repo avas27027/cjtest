@@ -1,6 +1,6 @@
 import { Product } from '../models/Products';
+import FirebaseOrm from './FirebaseOrm';
 import orm from './MockOrm';
-
 
 // **** Functions **** //
 
@@ -8,7 +8,7 @@ import orm from './MockOrm';
  * Get one product.
  */
 async function getOne(sku: string): Promise<Product | null> {
-  const db = await orm.openDb();
+  const db = await FirebaseOrm.openDb()
   for (const product of db.products) {
     if (product.productSku === sku) {
       return product;
@@ -21,7 +21,7 @@ async function getOne(sku: string): Promise<Product | null> {
  * See if a product with the given sku exists.
  */
 async function persists(sku: string): Promise<boolean> {
-  const db = await orm.openDb();
+  const db = await FirebaseOrm.openDb()
   for (const product of db.products) {
     if (product.productSku === sku) {
       return true;
@@ -57,45 +57,31 @@ async function syncProducts(productsList: Product[]): Promise<void> {
  * Get all products.
  */
 async function getAll(): Promise<Product[]> {
-  const db = await orm.openDb();
-  return db.products;
+  const fDB = await FirebaseOrm.openDb()
+  return fDB.products;
 }
 
 /**
  * Add one product.
  */
 async function add(product: Product): Promise<void> {
-  const db = await orm.openDb();
   const now = new Date()
   product.syncDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}  ${now.getHours()}:${now.getMinutes()}`
-  db.products.push(product);
-  return orm.saveDb(db);
+  FirebaseOrm.saveDb(product, FirebaseOrm.dbName.PRODUCT)
 }
 
 /**
  * Update a product.
  */
 async function update(product: Product): Promise<void> {
-  const db = await orm.openDb();
-  for (let i = 0; i < db.products.length; i++) {
-    if (db.products[i].productSku === product.productSku) {
-      db.products[i] = product;
-      return orm.saveDb(db);
-    }
-  }
+  FirebaseOrm.saveDb(product, FirebaseOrm.dbName.PRODUCT)
 }
 
 /**
  * Delete one product.
  */
 async function delete_(sku: string): Promise<void> {
-  const db = await orm.openDb();
-  for (let i = 0; i < db.products.length; i++) {
-    if (db.products[i].productSku === sku) {
-      db.products.splice(i, 1);
-      return orm.saveDb(db);
-    }
-  }
+  FirebaseOrm.deleteDb(sku, FirebaseOrm.dbName.PRODUCT)
 }
 
 

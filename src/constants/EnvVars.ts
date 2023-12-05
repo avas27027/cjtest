@@ -32,5 +32,17 @@ export default {
   Paypal: {
     clientID: (process.env.PAYPAL_CLIENT_ID ?? ''),
     clientSecret: (process.env.PAYPAL_CLIENT_SECRET ?? '')
+  },
+  Server_Config: {
+    /**
+     * **Ideal for:** Product Sync Interval
+     */
+    syncIntervalMins: (Number(process.env.SERVER_SYNC_INTERVAL_MIN) ?? 0),
+    /**
+     * **Margin** before Expire Days ex: ExpireDay (15) - Margin (5)  = NewExpireDay (10)
+     * 
+     * **Ideal for:** Key Sync Margin 
+     */
+    syncMarginDays: (Number(process.env.KEY_SYNC_INTERVAL_DAY) ?? 0) 
   }
 } as const;

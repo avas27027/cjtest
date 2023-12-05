@@ -4,6 +4,7 @@ import KeyRepo from '../repos/KeyRepo';
 import EnvVars from '../constants/EnvVars';
 
 const delay = (ms = 2000) => new Promise(r => setTimeout(r, ms));
+const margin = EnvVars.Server_Config.syncMarginDays
 async function newKey() {
     const keyPost = KeyRepo.add
     console.log(EnvVars.CJ.username, EnvVars.CJ.password)
@@ -17,7 +18,7 @@ async function getKey(): Promise<IKey> {
     let today = new Date()
     if (keyGet.data != null) {
         let expireDate = new Date(keyGet.data.accessTokenExpiryDate)
-        expireDate.setDate(expireDate.getDate() - 5)
+        expireDate.setDate(expireDate.getDate() - margin)
         if (today >= expireDate) {
             newKey()
             return await KeyRepo.get()

@@ -15,3 +15,15 @@ export class RouteError extends Error {
     this.status = status;
   }
 }
+
+
+/**
+ * Error with status code and message
+ */
+export class FirebaseError extends Error {
+  status: HttpStatusCodes;
+  constructor(status: HttpStatusCodes, message: string) {
+    super(message);
+    this.status = status;
+  }
+}
