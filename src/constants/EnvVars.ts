@@ -39,9 +39,9 @@ export default {
      */
     syncIntervalMins: (Number(process.env.SERVER_SYNC_INTERVAL_MIN) ?? 0),
     /**
-     * **Margin** before Expire Days ex: ExpireDay (15) - Margin (5)  = NewExpireDay (10)
+     * @description Margin before Expire Days ex: ExpireDay (15) - Margin (5)  = NewExpireDay (10)
      * 
-     * **Ideal for:** Key Sync Margin 
+     * @useCase **Ideal for:** Key Sync Margin 
      */
     syncMarginDays: (Number(process.env.KEY_SYNC_INTERVAL_DAY) ?? 0) 
   }

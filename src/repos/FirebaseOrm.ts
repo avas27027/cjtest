@@ -29,7 +29,6 @@ async function openDb(): Promise<IDb> {
         });
         return data
     });
-    console.log(product)
     return { 'key': key, 'products': product }
 }
 
