@@ -9,13 +9,6 @@ type Immutable<T> = {
 
 const Paths = {
   Base: '/api',
-  Users: {
-    Base: '/users',
-    Get: '/all',
-    Add: '/add',
-    Update: '/update',
-    Delete: '/delete/:id',
-  },
   Key: {
     Base: '/key',
     Get: '/all',
@@ -24,6 +17,8 @@ const Paths = {
   Product: {
     Base: '/product',
     All: '/all',
+    Add: '/add',
+    Delete: '/delete',
     Categories: '/categories',
     Comment: '/comment/:pid',
     Detail: '/detail/:pid'
@@ -38,6 +33,13 @@ const Paths = {
     Base: '/pay',
     Create: '/create',
     Capture: '/capture/:orderID'
+  },
+  User: {
+    Base: '/user',
+    Login: '/login',
+    Register: '/register',
+    AuthState: '/authState',
+    LogOut: '/logout',
   }
 };
 

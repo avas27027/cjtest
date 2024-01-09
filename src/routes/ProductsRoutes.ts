@@ -19,6 +19,24 @@ async function getProductList(_: IReq, res: IRes) {
 }
 
 /**
+ * Add a product
+ */
+async function addProduct(req: IReq<{ "sku": string }>, res: IRes) {
+    const sku = req.body.sku
+    const prodList = await ProductService.addProduct(sku)
+    return res.status(HttpStatusCodes.OK).json({ prodList });
+}
+
+/**
+ * Delete a product
+ */
+async function deleteProduct(req: IReq<{ "sku": string }>, res: IRes) {
+    const sku = req.body.sku
+    const resp = await ProductService.deleteProduct(sku)
+    return res.status(HttpStatusCodes.OK).json({"deleteSku":sku});
+}
+
+/**
  * Get detail of a product
  */
 async function getProductDetails(req: IReq, res: IRes) {
@@ -38,6 +56,8 @@ async function getProductComments(req: IReq, res: IRes) {
 
 export default {
     getProductList,
+    addProduct,
+    deleteProduct,
     getCategoryList,
     getProductDetails,
     getProductComments

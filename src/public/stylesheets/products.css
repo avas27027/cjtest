@@ -1,0 +1,31 @@
+
+.prod-delete-but{
+    width: 100%;
+    height: 30px;
+    color: white;
+    background-color: red;
+    border: 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.prod-delete-but:hover{
+    filter:brightness(90%)
+}
+
+.product-menu{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 10%;
+}
+
+.products-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-container{
+    width: 80%;
+}

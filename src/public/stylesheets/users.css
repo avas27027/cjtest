@@ -1,50 +1,23 @@
-body {
-  padding: 100px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+h1{
+  width: 100%;
+  text-align: center;
+}
+.user-container{
+  padding: 0 20%;  
 }
 
-body .users-column {
-  display: inline-block;
-  margin-right: 2em;
-  vertical-align: top;
+.user-form{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-body .users-column .column-header {
-  padding-bottom: 5px;
-  font-weight: 700;
-  font-size: 1.2em;
+.user-buttons{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
-
-
-/** Add User Column **/
-
-body .add-user-col input {
-  margin-bottom: 10px;
-}
-
-body .add-user-col #add-user-btn {
-  margin-top: 2px;
-  margin-bottom: 10px;
-}
-
-body .add-user-col #logout-btn {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  font-size: 15px;
-}
-
-
-/** Users Display Column **/
-
-body .users-column .user-display-ele {
-  padding-bottom: 10px;
-}
-
-body .users-column .user-display-ele button {
-  margin-top: 2px;
-  margin-bottom: 10px;
-}
-
-body .users-column .user-display-ele .edit-view {
-  display: none;
+button{
+  cursor: pointer;
 }

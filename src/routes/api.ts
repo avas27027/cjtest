@@ -7,7 +7,7 @@ import ProductsRoutes from './ProductsRoutes';
 import OrderRoutes from './OrderRoutes';
 import Order from '../models/Order';
 import PaymentRoutes from './PaymentRoutes';
-
+import UserRoutes from './UserRoutes';
 
 // **** Variables **** //
 
@@ -21,16 +21,18 @@ const keyRouter = Router()
 const productRouter = Router()
 const orderRouter = Router()
 const paymentRouter = Router();
+const userRouter = Router();
 
 
-//** Key Router */
+//#region ** Key Router 
 // Get key 
 keyRouter.get(
   Paths.Key.Get,
   KeyRoutes.getKey
 )
+//#endregion
 
-//** Product Router */
+//#region ** Product Router 
 // Get CategoryList
 productRouter.get(
   Paths.Product.Categories,
@@ -41,6 +43,20 @@ productRouter.get(
 productRouter.get(
   Paths.Product.All,
   ProductsRoutes.getProductList
+)
+
+// Add Product
+productRouter.post(
+  Paths.Product.Add,
+  validate("sku"),
+  ProductsRoutes.addProduct
+)
+
+// Delete Product
+productRouter.post(
+  Paths.Product.Delete,
+  validate("sku"),
+  ProductsRoutes.deleteProduct
 )
 
 // Get Comments
@@ -56,8 +72,9 @@ productRouter.get(
   validate(['pid','string','params']),
   ProductsRoutes.getProductDetails
 )
+//#endregion 
 
-//** Order Router */
+//#region ** Order Router 
 // Get all orders
 orderRouter.get(
   Paths.Order.All,
@@ -77,8 +94,9 @@ orderRouter.get(
   validate('JWT'),
   OrderRoutes.getOrdersByUser
 )
+//#endregion
 
-/** Payments Router */
+//#region ** Payments Router 
 //Create Payment
 paymentRouter.post(
   Paths.Payments.Create,
@@ -90,20 +108,40 @@ paymentRouter.post(
   Paths.Payments.Capture,
   PaymentRoutes.paypalCaptureOrder
 )
+//#endregion
 
-// Add UserRouter
+//#region ** User Router */
+//Login
+userRouter.post(
+  Paths.User.Login,
+  validate('email','password'),
+  UserRoutes.singInFirebase
+)
+//Register
+userRouter.post(
+  Paths.User.Register,
+  validate('email','password'),
+  UserRoutes.registerFirebase
+)
+//LogOut
+userRouter.get(
+  Paths.User.LogOut,
+  UserRoutes.signOutFirebase
+)
+//Auth State
+userRouter.get(
+  Paths.User.AuthState,
+  UserRoutes.authStateFirebase
+)
+//#endregion
+
 apiRouter.use(Paths.Key.Base, keyRouter)
 apiRouter.use(Paths.Product.Base, productRouter)
 apiRouter.use(Paths.Order.Base, orderRouter)
 apiRouter.use(Paths.Payments.Base, paymentRouter)
+apiRouter.use(Paths.User.Base, userRouter)
 
 
 // **** Export default **** //
 
-export default {
-  apiRouter,
-  productRouter,
-  keyRouter,
-  paymentRouter,
-  orderRouter
-}
+export default apiRouter

@@ -4,12 +4,12 @@ import ProductRepo from '../repos/ProductRepo';
 import KeyService from '../services/KeyService';
 
 const CJfetcher = async (api: string, aToken: string, method: 'GET' | 'POST') => await fetch(`https://developers.cjdropshipping.com/api2.0/v1/product${api}`, { method: method, headers: { 'CJ-Access-Token': aToken, "Content-Type": "application/json" } }).then((res) => res.json())
-const Strapifetcher = async () => await fetch(`https://strapi3-gm7c.onrender.com/api/product-skus`, { method: "GET" }).then((res) => res.json())
-const interval = EnvVars.Server_Config.syncIntervalMins
+/*const Strapifetcher = async () => await fetch(`https://strapi3-gm7c.onrender.com/api/product-skus`, { method: "GET" }).then((res) => res.json())
+//const interval = EnvVars.Server_Config.syncIntervalMins
 
-/**
+**
  * Sync the new products with the DB
- */
+ *
 const delay = (ms = 2000) => new Promise(r => setTimeout(r, ms));
 const syncNewProds = async (skuList: string[], key: string) => {
     const productList: Product[] = []
@@ -25,7 +25,7 @@ const syncNewProds = async (skuList: string[], key: string) => {
  * @param skuList SKU List
  * @param key CJ Key
  * @param syncMinutes Interval between each sync
- */
+ *
 const syncNewProdsInter = async (skuList: string[], key: string, syncMinutes: number) => {
     const firstProd = await ProductRepo.getAll()
     const now = new Date()
@@ -40,7 +40,7 @@ const syncNewProdsInter = async (skuList: string[], key: string, syncMinutes: nu
     else {
         await syncNewProds(skuList, key)
     }
-}
+}*/
 
 /**
  * GET all products
@@ -54,11 +54,25 @@ async function getAllCategories(): Promise<CategoryList> {
  * Get all products
  */
 async function getProductList(): Promise<Product[]> {
-    const key = await KeyService.getKey();
-    const skuResponse = await Strapifetcher();
-    const skuList: string[] = skuResponse.data.map((e: { attributes: { SKU: string } }) => { return e.attributes.SKU })
-    syncNewProdsInter(skuList, key.data.accessToken, interval)
     return await ProductRepo.getAll();
+}
+
+/**
+ * Add a product
+ */
+async function addProduct(sku: string): Promise<Product[]> {
+    const key = await KeyService.getKey();
+    const response = await CJfetcher(`/list?productSku=${sku}`, key.data.accessToken, "GET")
+    const newProd: Product[] = response.data.list
+    await ProductRepo.add(newProd[0])
+    return newProd
+}
+
+/**
+ * Delete a product
+ */
+async function deleteProduct(sku: string): Promise<void> {
+    await ProductRepo.delete(sku)
 }
 
 /**
@@ -83,6 +97,8 @@ async function getProductComments(pid: string): Promise<ProductReview> {
 export default {
     getAllCategories,
     getProductList,
+    addProduct,
+    deleteProduct,
     getProductDetails,
     getProductComments
 }

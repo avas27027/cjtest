@@ -3,7 +3,6 @@ import { getFirestore, Timestamp, FieldValue, Filter } from 'firebase-admin/fire
 const serviceAccount = require('../../serviceAccountKey.json');
 import { IKey } from '../models/Key';
 import { Product } from '../models/Products';
-import e from 'express';
 
 export const DB_NAME_INVALID_ERR = 'DB name Invalid';
 
@@ -41,7 +40,7 @@ async function saveDb(document: IKey | Product, name: dbName): Promise<void> {
     }
     else if (name == 'products') {
         const ref = document as Product
-        await db.collection(name).doc(ref.productSku).set(ref);
+        await db.collection(name).doc(ref.productSku).set(ref)
     }
 }
 

@@ -19,6 +19,7 @@ import EnvVars from './constants/EnvVars';
 import HttpStatusCodes from './constants/HttpStatusCodes';
 
 import { RouteError } from './other/classes';
+import UserService from './services/UserService';
 
 enum NodeEnvs {
   Dev = 'development',
@@ -46,11 +47,19 @@ if (EnvVars.NodeEnv === NodeEnvs.Dev) {
 
 // Security
 if (EnvVars.NodeEnv === NodeEnvs.Production) {
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "script-src": ["*"],
+        "default-src": ["*"],
+        "img-src":["*"]
+      }
+    },
+  }));
 }
 
 // Add APIs, must be after middleware
-app.use(Paths.Base, BaseRouter.apiRouter);
+app.use(Paths.Base, BaseRouter);
 
 // Add error handler
 app.use((
@@ -83,7 +92,7 @@ app.use(express.static(staticDir));
 
 // Nav to users pg by default
 app.get('/', (_: Request, res: Response) => {
-  return res.redirect('/key');
+  return res.redirect('/login');
 });
 
 // Redirect to login if not logged in.
@@ -91,8 +100,19 @@ app.get('/users', (_: Request, res: Response) => {
   return res.sendFile('test.html', { root: viewsDir });
 });
 
-app.get('/key', (_: Request, res: Response) => {
-  return res.sendFile('test.html', { root: viewsDir })
+app.get('/login', (_: Request, res: Response) => {
+  return res.sendFile('login.html', { root: viewsDir })
+})
+
+app.get('/prod', (_: Request, res: Response, next: NextFunction) => {
+  if(UserService.logState()){
+    next();
+  }
+  else{
+    return res.redirect('/login');
+  }
+}, (_: Request, res: Response) => {
+  return res.sendFile('products.html', { root: viewsDir })
 })
 
 
